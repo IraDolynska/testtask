@@ -31,7 +31,7 @@ class SmallRaisedBtn extends StatelessWidget {
           children:[
           Container( margin: EdgeInsets.all(5.0),
             child:Image(image: AssetImage(avatar), width: 45,height: 45,),),
-          Container( margin: EdgeInsets.all(5.0),
+          Container( margin: EdgeInsets.fromLTRB(10.0,0, 10.0, 0),
           child: Text(name, 
           style: TextStyle(
             color: Colors.white,

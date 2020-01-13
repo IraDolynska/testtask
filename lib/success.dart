@@ -28,7 +28,6 @@ Timer _timer;
       (Timer timer) => setState(
         () {
           if (_start < 1) {
-            timer.cancel();
             setState(() {
                 Navigator.push(
                   context,
@@ -48,6 +47,11 @@ Timer _timer;
     });
   }
 
+  void deactivate(){
+  super.deactivate();
+  _timer.cancel();
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,10 +67,10 @@ Timer _timer;
         ),
         Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                margin: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 5.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: images
@@ -75,6 +79,7 @@ Timer _timer;
                         .toList()),
               ),
               Container(
+                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
                 child: Image(
                   image: AssetImage('assets/succs.png'),
                   width: 285.5,
@@ -87,16 +92,16 @@ Timer _timer;
                     "Sting begins in...",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      fontFamily: 'PaybAck',
                     ),
                   ),
                   Text(
                     "$_start",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 80,
+                      fontFamily: 'PaybAck',
                     ),
                   ),
                 ],

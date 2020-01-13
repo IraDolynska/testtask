@@ -9,24 +9,22 @@ class PlayersContnr extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Container(
       margin: EdgeInsets.all(3.0),
-      width: 274,
-      height: 60,
+      width: 163.5,
+      height: 51.5,
       decoration: BoxDecoration(
-        border: Border(
-            bottom: BorderSide(
-          color: Color(0xFF2a2a2a),
-          width: 3.0,
-        )),
+        color: Color(0xFF2a2a2a),
+        borderRadius: BorderRadius.circular(30)
       ),
       child: Row(children: <Widget>[
         Container( margin: EdgeInsets.all(5.0),
             child:Image(image: AssetImage(avatar),
              width: 45,height: 45,),),
-        Container( margin: EdgeInsets.all(5.0),
+        Container( margin: EdgeInsets.fromLTRB(20.0,0, 20.0, 0),
           child: Text(name, 
           style: TextStyle(
             color: Colors.white,
-            fontSize: 21.0,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),),),
       ],)
     );

@@ -22,10 +22,12 @@ class NomScreenState extends State<NomScreen> {
 
   void initState() {
     super.initState();
+    
     setState(() {
       lead = users[rand.nextInt(10)];
     });
   }
+
 
   NomScreenState() {
     this.number = RandNum(5);
@@ -41,28 +43,38 @@ class NomScreenState extends State<NomScreen> {
   ];
   List users = [
     {"id": 1, "avatar": "assets/us1.png", "name": "Alan"},
-    {"id": 2, "avatar": "assets/us1.png", "name": "Richard"},
-    {"id": 3, "avatar": "assets/us1.png", "name": "Bob"},
-    {"id": 4, "avatar": "assets/us1.png", "name": "Adam"},
-    {"id": 5, "avatar": "assets/us1.png", "name": "Andrew"},
-    {"id": 6, "avatar": "assets/us1.png", "name": "Kate"},
-    {"id": 7, "avatar": "assets/us1.png", "name": "Loren"},
-    {"id": 8, "avatar": "assets/us1.png", "name": "Helen"},
-    {"id": 9, "avatar": "assets/us1.png", "name": "Sally"},
-    {"id": 10, "avatar": "assets/us1.png", "name": "Ira"},
+    {"id": 2, "avatar": "assets/us2.png", "name": "Richard"},
+    {"id": 3, "avatar": "assets/us3.png", "name": "Bob"},
+    {"id": 4, "avatar": "assets/us4.png", "name": "Adam"},
+    {"id": 5, "avatar": "assets/us5.png", "name": "Andrew"},
+    {"id": 6, "avatar": "assets/us6.png", "name": "Kate"},
+    {"id": 7, "avatar": "assets/us7.png", "name": "Loren"},
+    {"id": 8, "avatar": "assets/us8.png", "name": "Helen"},
+    {"id": 9, "avatar": "assets/us9.png", "name": "Sally"},
+    {"id": 10, "avatar": "assets/us7.png", "name": "Ira"},
   ];
 
   List checkedUsers = [];
 
   void pressCheck(id) {
     setState(() {
-      if (checkedUsers.contains(id)) {
-        checkedUsers.remove(id);
+      var user = users.firstWhere((user) => user["id"] == id);
+      if (checkedUsers.contains(user)) {
+        checkedUsers.remove(user);
       } else
-        checkedUsers.add(id);
+        checkedUsers.add(user);
     });
   }
 
+  saveDate() async {
+    await addToAsyncStorage('string', 'checkedUsers', jsonEncode(checkedUsers));
+    await addToAsyncStorage('string', 'lead', jsonEncode(lead));
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VoteScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,18 +106,23 @@ class NomScreenState extends State<NomScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.all(10.0),
-                    child: Image(
-                      image: AssetImage('assets/Round.png'),
-                      width: 262,
-                      height: 18,
+                    child: Text(
+                      'Round 2: Automobile',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'PaybAck',
+                        color: Color(0xFFce1140)
+                      ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.all(10.0),
-                    child: Image(
-                      image: AssetImage('assets/sting.png'),
-                      width: 304,
-                      height: 24,
+                    child: Text(
+                      'sting nomination',
+                      style: TextStyle(
+                        fontSize: 34,
+                        fontFamily: 'PaybAck',
+                        color: Colors.white),
                     ),
                   ),
                   Container(
@@ -141,11 +158,11 @@ class NomScreenState extends State<NomScreen> {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            fontSize: 26.0,
+                            fontSize: 25.0,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                            fontFamily: 'PaybAck'),
                         children: [
-                          TextSpan(text: 'NOMINATE '),
+                          TextSpan(text: 'NOMINATE'),
                           TextSpan(
                             text: ' $number ',
                             style: TextStyle(
@@ -153,7 +170,7 @@ class NomScreenState extends State<NomScreen> {
                               color: Color(0xFFce1140),
                             ),
                           ),
-                          TextSpan(text: ' PLAYERS'),
+                          TextSpan(text: 'PLAYERS'),
                         ]),
                   ),
                   Column(
@@ -163,11 +180,12 @@ class NomScreenState extends State<NomScreen> {
                               onPressed: () {
                                 pressCheck(item["id"]);
                               },
-                              check: checkedUsers.contains(item['id']),
+                              check: checkedUsers.contains(item),
                               avatar: item["avatar"],
                               name: item["name"]))
                           .toList()),
                   Container(
+                    margin: EdgeInsets.all(10.0),
                     width: 274,
                     height: 60,
                     decoration: BoxDecoration(
@@ -180,13 +198,7 @@ class NomScreenState extends State<NomScreen> {
                     child: RaisedButton(
                       onPressed: checkedUsers.length == number
                           ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VoteScreen()),
-                              );
-                               addToAsyncStorage('string', 'checkedUsers', jsonEncode(checkedUsers));
-                               addToAsyncStorage('string', 'lead', jsonEncode(lead));
+                              saveDate();
                             }
                           : null,
                       color: Color(0xFFce1140),
@@ -195,6 +207,7 @@ class NomScreenState extends State<NomScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 21.0,
+                            //fontFamily: 'TypeWriter',
                           )),
                     ),
                   ),
