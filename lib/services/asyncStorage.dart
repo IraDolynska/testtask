@@ -4,9 +4,7 @@ import 'dart:convert';
 addToAsyncStorage(dataType, key, value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
-  print('[VALUE] $value');
-  switch(dataType) {
+  switch (dataType) {
     case 'string':
       {
         prefs.setString(key, value);
