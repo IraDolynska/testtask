@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PlayerBtn extends StatelessWidget {
-  PlayerBtn({this.check, @required this.onPressed, this.avatar, this.name});
+class PlayerCheck extends StatelessWidget {
+  PlayerCheck({this.check, @required this.onPressed, this.avatar, this.name});
   final check;
   final Function onPressed;
   final avatar;
@@ -23,7 +23,7 @@ class PlayerBtn extends StatelessWidget {
       child: new FlatButton.icon(
         color: check ? Color(0xFF004990) : Color(0xFF2a2a2a),
         icon: Icon(
-          check ? Icons.check_box : Icons.check_box_outline_blank,
+          check ? Icons.album : Icons.lens,
           color: check ? Colors.white : Color(0xFF525252),
           size: 28.0,
         ),

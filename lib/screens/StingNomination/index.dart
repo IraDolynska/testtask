@@ -168,7 +168,7 @@ class NomScreenState extends State<NomScreen> {
                         width: 5.0,
                       )),
                     ),
-                    child: RaisedButton(
+                    child: FlatButton(
                       onPressed:
                           checkedUsers.length == number ? saveDate : null,
                       color: Color(0xFFce1140),

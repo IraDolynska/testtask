@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:testtask/constants/imgList.dart';
-import 'package:testtask/screens/MainScreen/index.dart';
+import 'package:testtask/screens/PlaceYourVote/index.dart';
 import 'package:testtask/screens/StingNomination/index.dart';
 import 'package:testtask/components/voteButton.dart';
 
@@ -17,7 +17,7 @@ class VoteResult extends StatefulWidget {
 
 class VoteResultState extends State<VoteResult> {
   Timer _timer;
-  int _start = 15;
+  int _start = 5;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class VoteResultState extends State<VoteResult> {
       startTimer();
     });
   }
-
+  @override
   void deactivate() {
     super.deactivate();
     _timer.cancel();
@@ -43,7 +43,7 @@ class VoteResultState extends State<VoteResult> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          widget.voteRes ? MainScreen() : NomScreen()),
+                          widget.voteRes ? PlaceVote() : NomScreen()),
                   (Route<dynamic> route) => false);
             });
           } else {

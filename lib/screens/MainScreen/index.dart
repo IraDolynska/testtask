@@ -35,7 +35,7 @@ class MainScreen extends StatelessWidget {
                     width: 5.0,
                   )),
                 ),
-                child: RaisedButton.icon(
+                child: FlatButton.icon(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                         context,

@@ -17,7 +17,7 @@ class VoteScreenState extends State<VoteScreen> {
   int like = 0;
   int dislike = 0;
   Timer _timer;
-  int _start = 15;
+  int _start = 5;
 
   @override
   void initState() {
@@ -26,10 +26,11 @@ class VoteScreenState extends State<VoteScreen> {
     startTimer();
   }
 
+  @override
   void deactivate() {
     super.deactivate();
     _timer.cancel();
-    remover();
+    // remover();
   }
 
   void startTimer() {

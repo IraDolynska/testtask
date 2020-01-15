@@ -36,7 +36,7 @@ class VoteBtnState extends State<VoteBtn> {
               ),
             ],
           ),
-          child: RaisedButton(
+          child: FlatButton(
             onPressed: widget.onPressed,
             child: Icon(
               widget.icon,
