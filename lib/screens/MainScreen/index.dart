@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testtask/components/button.dart';
 import 'package:testtask/screens/StingNomination/index.dart';
 
 class MainScreen extends StatelessWidget {
@@ -25,38 +26,16 @@ class MainScreen extends StatelessWidget {
                   image: AssetImage('assets/images/logo.png'),
                 ),
               ),
-              Container(
-                width: 274,
-                height: 60,
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                    color: Color(0xFF7b0725),
-                    width: 5.0,
-                  )),
-                ),
-                child: FlatButton.icon(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => NomScreen()),
-                        (Route<dynamic> route) => false);
-                  },
-                  color: Color(0xFFce1140),
-                  icon: Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
-                  label: Text(
-                    'New Game',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 21.0,
-                      fontFamily: 'TypeWriter',
-                    ),
-                  ),
-                ),
+              Btn(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => NomScreen()),
+                      (Route<dynamic> route) => false);
+                },
+                iconFirst: true,
+                icon: Icons.play_arrow,
+                text: 'New Game',
               ),
             ],
           ),

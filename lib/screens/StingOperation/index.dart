@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testtask/components/button.dart';
 import 'package:testtask/components/playerCont.dart';
 import 'package:testtask/constants/imgList.dart';
 import 'package:testtask/screens/MainScreen/index.dart';
@@ -66,12 +67,10 @@ class StingOperResultState extends State<StingOperResult> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Text(
                   widget.voteRes
-                      ? 'The sting operation was carried out successfully!'
-                      : 'The sting operation was sabotaged!',
-                  softWrap: true,
+                      ? 'The sting operation\nwas carried out\nsuccessfully!'
+                      : 'The sting operation\nwas sabotaged!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -116,46 +115,25 @@ class StingOperResultState extends State<StingOperResult> {
                             Color(0xFFf44336)),
                       ),
                     ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 274,
-                height: 60,
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                    color: Color(0xFF7b0725),
-                    width: 5.0,
-                  )),
-                ),
-                child: FlatButton.icon(
-                  onPressed: widget.voteRes
-                      ? () {Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MakeAccusation()),
-                              (Route<dynamic> route) => false);}
-                      : () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainScreen()),
-                              (Route<dynamic> route) => false);
-                        },
-                  color: Color(0xFFce1140),
-                  label: Text(
-                    'Next',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 21.0,
-                      fontFamily: 'TypeWriter',
-                    ),
-                  ),
-                  icon: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
-                ),
+              Btn(
+                onPressed: widget.voteRes
+                    ? () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MakeAccusation()),
+                            (Route<dynamic> route) => false);
+                      }
+                    : () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainScreen()),
+                            (Route<dynamic> route) => false);
+                      },
+                icon: Icons.arrow_forward_ios,
+                text: 'Next',
+                iconFirst: false,
               ),
             ],
           ),

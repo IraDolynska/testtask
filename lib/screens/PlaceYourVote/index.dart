@@ -39,7 +39,8 @@ class _PlaceVoteState extends State<PlaceVote> {
                   Container(
                     margin: EdgeInsets.all(25.0),
                     child: Text(
-                      'Place your\n  vote!',
+                      'Place your\nvote!',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 36,
                           fontFamily: 'PaybAck',

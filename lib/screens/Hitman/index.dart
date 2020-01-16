@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:testtask/components/button.dart';
 import 'package:testtask/constants/imgList.dart';
 import 'package:testtask/screens/MainScreen/index.dart';
 
@@ -14,24 +15,21 @@ class Hitman extends StatefulWidget {
 class HitmanState extends State<Hitman> {
   Timer _timer;
   int _start = 5;
-  bool profiler;
-  bool informant;
-  bool timerOut = true;
+  bool timerOut = false;
+  bool murdered = false;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       startTimer();
-      profiler = widget.accused["profiler"];
-      informant = widget.accused["informant"];
+      if ((widget.accused["profiler"] == true && widget.role == true) ||
+          (widget.accused["informant"] == true && widget.role == false)) {
+        murdered = true;
+      }
+      print('murdered: $murdered');
     });
   }
-  // @override
-  // void deactivate() {
-  //   super.deactivate();
-  //   _timer.cancel();
-  // }
 
   void startTimer() {
     _timer = new Timer.periodic(
@@ -41,7 +39,7 @@ class HitmanState extends State<Hitman> {
           if (_start < 1) {
             setState(() {
               _timer.cancel();
-              timerOut = false;
+              timerOut = true;
             });
           } else {
             _start = _start - 1;
@@ -66,7 +64,6 @@ class HitmanState extends State<Hitman> {
         ),
         Center(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
@@ -88,10 +85,9 @@ class HitmanState extends State<Hitman> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                margin: EdgeInsets.all(10.0),
                 child: Text(
-                  'Congratulations fbi for completing 4 sting operations!',
-                  softWrap: true,
+                  'Congratulations fbi for\ncompleting 4 sting\noperations!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -105,52 +101,87 @@ class HitmanState extends State<Hitman> {
                 child: Text(
                   widget.role ? 'profiler' : 'informant',
                   style: TextStyle(
-                      fontSize: 30.0,
-                      fontFamily: 'PaybAck',
-                      color: Colors.white),
+                    fontSize: 30.0,
+                    fontFamily: 'PaybAck',
+                    color: Colors.white,
+                    decoration: !timerOut
+                        ? TextDecoration.none
+                        : murdered
+                            ? TextDecoration.none
+                            : TextDecoration.lineThrough,
+                    decorationColor: Color(0xFFce1141),
+                    decorationThickness: 3.0,
+                  ),
                 ),
               ),
               Stack(
                 overflow: Overflow.visible,
+                alignment: Alignment.center,
                 children: <Widget>[
                   Container(
-                    child: Image(
-                      image: AssetImage(widget.accused["avatar"]),
-                      width: 143,
-                      height: 143,
-                    ),
+                    margin: EdgeInsets.all(10),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(500),
+                        child: ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              !timerOut
+                                  ? Colors.black.withOpacity(0)
+                                  : murdered
+                                      ? Colors.grey
+                                      : Colors.black.withOpacity(0),
+                              BlendMode.color),
+                          child: Image(
+                            image: AssetImage(widget.accused["avatar"]),
+                            fit: BoxFit.contain,
+                            // image: AssetImage('assets/images/testUser.png'),
+                            width: 143,
+                            height: 143,
+                            alignment: Alignment.center,
+                          ),
+                        )),
                   ),
-                  !timerOut
+                  timerOut
                       ? Positioned(
-                          child: widget.role
-                              ? Text(
-                                  profiler
-                                      ? 'Murdered!'
-                                      : 'Alive!',
-                                  style: TextStyle(
-                                      fontFamily: 'PaybAck',
-                                      fontSize: 32,
-                                      color: profiler
-                                          ? Color(0xFFce1141)
-                                          : Colors.white),
+                          top: murdered ? 50 : 5,
+                          left: murdered ? null : 10,
+                          child: murdered
+                              ? RotationTransition(
+                                  turns: AlwaysStoppedAnimation(345 / 360),
+                                  child: Text('Murdered!',
+                                      style: TextStyle(
+                                          fontFamily: 'PaybAck',
+                                          fontSize: 32,
+                                          color: Color(0xFFce1141))),
                                 )
-                              : Text(
-                                  informant
-                                      ? 'Murdered!'
-                                      : 'Alive!',
-                                  style: TextStyle(
-                                      fontFamily: 'PaybAck',
-                                      fontSize: 32,
-                                      color: informant
-                                          ? Color(0xFFce1141)
-                                          : Colors.white),
+                              : RotationTransition(
+                                  turns: AlwaysStoppedAnimation(340 / 360),
+                                  child: Text('Alive!',
+                                      style: TextStyle(
+                                        fontFamily: 'PaybAck',
+                                        fontSize: 32,
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 1.0,
+                                            color: Color(0xFF1f5c9a),
+                                            offset: Offset(1.5, 1.5),
+                                          ),
+                                          Shadow(
+                                            blurRadius: 1.0,
+                                            color: Color(0xFF1f5c9a),
+                                            offset: Offset(-1.5, -1.5),
+                                          ),
+                                        ],
+                                      )),
                                 ),
                         )
-                      : Container(),
+                      : Positioned(
+                          child: Container(),
+                        ),
                 ],
               ),
-
               Container(
+                margin: EdgeInsets.only(bottom: 20),
                 child: Text(
                   widget.accused["name"],
                   style: TextStyle(
@@ -159,10 +190,8 @@ class HitmanState extends State<Hitman> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-
-              timerOut
+              !timerOut
                   ? Container(
-                      margin: EdgeInsets.only(top: 20.0),
                       child: Text(
                         '$_start',
                         style: TextStyle(
@@ -171,40 +200,18 @@ class HitmanState extends State<Hitman> {
                             fontFamily: 'PaybAck'),
                       ),
                     )
-                  : Container(
-                margin: EdgeInsets.all(20.0),
-                width: 274,
-                height: 60,
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                    color: Color(0xFF7b0725),
-                    width: 5.0,
-                  )),
-                ),
-                child: FlatButton.icon(
-                  onPressed: (){Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                        (Route<dynamic> route) => false);},
-                  color: Color(0xFFce1140),
-                  label: Text(
-                    'Next',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 21.0,
-                      fontFamily: 'TypeWriter',
-                    ),
+                  : Btn(
+                    onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainScreen()),
+                              (Route<dynamic> route) => false);
+                        },
+                        icon: Icons.arrow_forward_ios,
+                        text: 'Next',
+                        iconFirst: false,
                   ),
-                  icon: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
-                ),
-              ),
-
-              
             ],
           ),
         ),

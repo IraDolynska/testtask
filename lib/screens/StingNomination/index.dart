@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testtask/components/button.dart';
 import 'dart:math';
 import 'package:testtask/screens/VoitingScreen/index.dart';
 import 'package:testtask/components/playerButton.dart';
@@ -157,29 +158,10 @@ class NomScreenState extends State<NomScreen> {
                               avatar: item["avatar"],
                               name: item["name"]))
                           .toList()),
-                  Container(
-                    margin: EdgeInsets.all(10.0),
-                    width: 274,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                        color: Color(0xFF7b0725),
-                        width: 5.0,
-                      )),
-                    ),
-                    child: FlatButton(
-                      onPressed:
-                          checkedUsers.length == number ? saveDate : null,
-                      color: Color(0xFFce1140),
-                      disabledColor: Colors.red[300],
-                      child: Text('Nominate',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 21.0,
-                            fontFamily: 'TypeWriter',
-                          )),
-                    ),
+                  Btn(
+                    onPressed: checkedUsers.length == number ? saveDate : null,
+                    icon: null,
+                    text: 'Nominate',
                   ),
                 ],
               ),

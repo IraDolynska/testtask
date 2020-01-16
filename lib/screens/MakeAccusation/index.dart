@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testtask/components/button.dart';
 import 'package:testtask/components/playerCheck.dart';
 import 'package:testtask/constants/imgList.dart';
 import 'package:testtask/constants/usersList.dart';
@@ -78,11 +79,10 @@ class MakeAccusationState extends State<MakeAccusation> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                    margin: EdgeInsets.all(10),
                     child: Text(
-                        'Guess the Informant or Profiler below to win the game',
+                        'Guess the Informant or Profiler\nbelow to win the game',
                         style: TextStyle(fontSize: 18, color: Colors.white),
-                        softWrap: true,
                         textAlign: TextAlign.center),
                   ),
                   Row(
@@ -146,38 +146,19 @@ class MakeAccusationState extends State<MakeAccusation> {
                               avatar: item["avatar"],
                               name: item["name"]))
                           .toList()),
-                  Container(
-                    margin: EdgeInsets.all(10.0),
-                    width: 274,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                        color: Color(0xFF7b0725),
-                        width: 5.0,
-                      )),
-                    ),
-                    child: FlatButton(
-                      onPressed: accused != null
-                          ? () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Hitman(
-                                            role: prof_inf,
-                                            accused: accused,
-                                          )));
-                            }
-                          : null,
-                      color: Color(0xFFce1140),
-                      disabledColor: Colors.red[300],
-                      child: Text('Guess',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 21.0,
-                            fontFamily: 'TypeWriter',
-                          )),
-                    ),
+                  Btn(
+                    onPressed: accused != null
+                        ? () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Hitman(
+                                          role: prof_inf,
+                                          accused: accused,
+                                        )));
+                          }
+                        : null,
+                    text: 'Guess',
                   ),
                 ],
               ),
