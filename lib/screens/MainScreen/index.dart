@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testtask/components/button.dart';
-import 'package:testtask/screens/StingNomination/index.dart';
+import 'package:testtask/screens/GameWrapper/index.dart';
+import 'package:testtask/services/navigation.dart';
 
 class MainScreen extends StatelessWidget {
   @override
@@ -28,10 +29,11 @@ class MainScreen extends StatelessWidget {
               ),
               Btn(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
+                  navigationReset(
                       context,
-                      MaterialPageRoute(builder: (context) => NomScreen()),
-                      (Route<dynamic> route) => false);
+                      GameWrapper(
+                        screen: 'NomScreen',
+                      ));
                 },
                 iconFirst: true,
                 icon: Icons.play_arrow,

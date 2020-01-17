@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:testtask/components/button.dart';
+import 'package:testtask/screens/GameWrapper/index.dart';
 import 'dart:math';
-import 'package:testtask/screens/VoitingScreen/index.dart';
 import 'package:testtask/components/playerButton.dart';
 import 'package:testtask/services/asyncStorage.dart';
 import 'dart:convert';
-import 'package:testtask/constants/imgList.dart';
 import 'package:testtask/constants/usersList.dart';
+import 'package:testtask/services/navigation.dart';
 
 class NomScreen extends StatefulWidget {
   @override
@@ -22,7 +22,11 @@ class NomScreenState extends State<NomScreen> {
   @override
   void initState() {
     super.initState();
-    this.number = randNum(5);
+    number = randNum(5);
+    choiceLeader();
+  }
+
+  choiceLeader() {
     setState(() {
       lead = users[rand.nextInt(10)];
     });
@@ -33,8 +37,8 @@ class NomScreenState extends State<NomScreen> {
   }
 
   void pressCheck(id) {
+    var user = users.firstWhere((user) => user["id"] == id);
     setState(() {
-      var user = users.firstWhere((user) => user["id"] == id);
       if (checkedUsers.contains(user)) {
         checkedUsers.remove(user);
       } else
@@ -45,130 +49,110 @@ class NomScreenState extends State<NomScreen> {
   saveDate() async {
     await addToAsyncStorage('string', 'checkedUsers', jsonEncode(checkedUsers));
     await addToAsyncStorage('string', 'lead', jsonEncode(lead));
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => VoteScreen()),
-        (Route<dynamic> route) => false);
+    navigationReset(context, GameWrapper(screen: 'VoteScreen'));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/StingNominationScreen.jpg"),
-              fit: BoxFit.cover,
+    return 
+        
+        SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    'Round 2: Automobile',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'PaybAck',
+                        color: Color(0xFFce1140)),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    'sting nomination',
+                    style: TextStyle(
+                        fontSize: 34,
+                        fontFamily: 'PaybAck',
+                        color: Colors.white),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'LEADER',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(lead["avatar"]),
+                          width: 45,
+                          height: 45,
+                        ),
+                      ),
+                      Text(
+                        lead["name"],
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          color: Colors.white,
+                          fontFamily: 'PaybAck'),
+                      children: [
+                        TextSpan(text: 'NOMINATE'),
+                        TextSpan(
+                          text: ' $number ',
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            color: Color(0xFFce1140),
+                          ),
+                        ),
+                        TextSpan(text: 'PLAYERS'),
+                      ]),
+                ),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: users
+                        .map<Widget>((item) => PlayerBtn(
+                          beforeIcon: Icons.check_box_outline_blank,
+                          afterIcon: Icons.check_box,
+                            onPressed: () {
+                              pressCheck(item["id"]);
+                            },
+                            check: checkedUsers.contains(item),
+                            avatar: item["avatar"],
+                            name: item["name"]))
+                        .toList()),
+                Btn(
+                  onPressed: checkedUsers.length == number ? saveDate : null,
+                  icon: null,
+                  text: 'Nominate',
+                  iconFirst: false,
+                ),
+              ],
             ),
           ),
-        ),
-        ListView(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: images
-                            .map<Widget>((item) => Image(
-                                image: AssetImage(item), width: 45, height: 45))
-                            .toList()),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Round 2: Automobile',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontFamily: 'PaybAck',
-                          color: Color(0xFFce1140)),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Text(
-                      'sting nomination',
-                      style: TextStyle(
-                          fontSize: 34,
-                          fontFamily: 'PaybAck',
-                          color: Colors.white),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'LEADER',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Image(
-                            image: AssetImage(lead["avatar"]),
-                            width: 45,
-                            height: 45,
-                          ),
-                        ),
-                        Text(
-                          lead["name"],
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            fontSize: 25.0,
-                            color: Colors.white,
-                            fontFamily: 'PaybAck'),
-                        children: [
-                          TextSpan(text: 'NOMINATE'),
-                          TextSpan(
-                            text: ' $number ',
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              color: Color(0xFFce1140),
-                            ),
-                          ),
-                          TextSpan(text: 'PLAYERS'),
-                        ]),
-                  ),
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: users
-                          .map<Widget>((item) => PlayerBtn(
-                              onPressed: () {
-                                pressCheck(item["id"]);
-                              },
-                              check: checkedUsers.contains(item),
-                              avatar: item["avatar"],
-                              name: item["name"]))
-                          .toList()),
-                  Btn(
-                    onPressed: checkedUsers.length == number ? saveDate : null,
-                    icon: null,
-                    text: 'Nominate',
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    ));
+      
+    );
   }
 }

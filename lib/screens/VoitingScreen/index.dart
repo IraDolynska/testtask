@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:testtask/screens/NominationResult/index.dart';
+import 'package:testtask/screens/GameWrapper/index.dart';
 import 'package:testtask/services/asyncStorage.dart';
 import 'package:testtask/components/playerCont.dart';
 import 'dart:async';
-import 'package:testtask/constants/imgList.dart';
 import 'package:testtask/components/voteButton.dart';
+import 'package:testtask/services/navigation.dart';
 
 class VoteScreen extends StatefulWidget {
   @override
@@ -39,17 +39,13 @@ class VoteScreenState extends State<VoteScreen> {
       (Timer timer) => setState(
         () {
           if (_start < 1) {
-            setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => VoteResult(
-                            voteRes: like > dislike,
-                            like: like,
-                            dislike: dislike,
-                          )),
-                  (Route<dynamic> route) => false);
-            });
+            navigationReset(
+                context,
+                GameWrapper(screen: 'VoteResult',
+                  voteRes: like > dislike,
+                  like: like,
+                  dislike: dislike,
+                ));
           } else {
             _start = _start - 1;
           }
@@ -72,157 +68,128 @@ class VoteScreenState extends State<VoteScreen> {
     });
   }
 
-  countVoteLike() {
+  countVote(n) {
     setState(() {
-      ++like;
-    });
-  }
-
-  countVotelDisike() {
-    setState(() {
-      ++dislike;
+      n ? ++like : ++dislike;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/StingNominationScreen.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        leader != null && players != null
-            ? ListView(
-                children: [
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return leader != null && players != null
+        ? SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Round 3: Automobile',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: 'PaybAck',
+                          color: Color(0xFFce1140)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'sting nomination',
+                      style: TextStyle(
+                          fontSize: 34,
+                          fontFamily: 'PaybAck',
+                          color: Colors.white),
+                    ),
+                  ),
+                  Text(
+                    'TIMER $_start',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.grey[700],
+                      fontFamily: 'PaybAck',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: images
-                                  .map<Widget>((item) => Image(
-                                      image: AssetImage(item),
-                                      width: 45,
-                                      height: 45))
-                                  .toList()),
+                        Text(
+                          'LEADER',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            'Round 3: Automobile',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontFamily: 'PaybAck',
-                                color: Color(0xFFce1140)),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            'sting nomination',
-                            style: TextStyle(
-                                fontSize: 34,
-                                fontFamily: 'PaybAck',
-                                color: Colors.white),
+                        Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Image(
+                            image: AssetImage(leader["avatar"]),
+                            width: 45,
+                            height: 45,
                           ),
                         ),
                         Text(
-                          'TIMER $_start',
+                          leader["name"],
                           style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.grey[700],
-                            fontFamily: 'PaybAck',
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'LEADER',
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Image(
-                                  image: AssetImage(leader["avatar"]),
-                                  width: 45,
-                                  height: 45,
-                                ),
-                              ),
-                              Text(
-                                leader["name"],
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            'OPERATORS',
-                            style: TextStyle(
-                              fontFamily: 'PaybAck',
-                              fontSize: 30,
+                              fontSize: 20.0,
                               color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Wrap(
-                            children: players
-                                .map<Widget>((item) => PlayersContnr(
-                                      avatar: item["avatar"],
-                                      name: item["name"],
-                                    ))
-                                .toList()),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            VoteBtn(
-                              icon: Icons.thumb_up,
-                              colorBtn: Color(0xFF008a63),
-                              colorShad: Color(0xFF004e38),
-                              onPressed: countVoteLike,
-                              counter: like,
-                            ),
-                            VoteBtn(
-                              icon: Icons.thumb_down,
-                              colorBtn: Color(0xFFce1141),
-                              colorShad: Color(0xFF71041f),
-                              onPressed: countVotelDisike,
-                              counter: dislike,
-                            ),
-                          ],
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'OPERATORS',
+                      style: TextStyle(
+                        fontFamily: 'PaybAck',
+                        fontSize: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Wrap(
+                      children: players
+                          .map<Widget>((item) => PlayersContainer(
+                                avatar: item["avatar"],
+                                name: item["name"],
+                              ))
+                          .toList()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      VoteBtn(
+                        icon: Icons.thumb_up,
+                        colorBtn: Color(0xFF008a63),
+                        colorShadow: Color(0xFF004e38),
+                        onPressed: () {
+                          countVote(true);
+                        },
+                        counter: like,
+                      ),
+                      VoteBtn(
+                        icon: Icons.thumb_down,
+                        colorBtn: Color(0xFFce1141),
+                        colorShadow: Color(0xFF71041f),
+                        onPressed: () {
+                          countVote(false);
+                        },
+                        counter: dislike,
+                      ),
+                    ],
+                  ),
                 ],
-              )
-            : Container(
-                alignment: Alignment.center,
-                child: new CircularProgressIndicator(
-                  valueColor:
-                      new AlwaysStoppedAnimation<Color>(Color(0xFFf44336)),
-                ),
               ),
-      ],
-    ));
+            ),
+          )
+        : Container(
+            alignment: Alignment.center,
+            child: new CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFFf44336)),
+            ),
+          );
   }
 }

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
 class PlayerBtn extends StatelessWidget {
-  PlayerBtn({this.check, @required this.onPressed, this.avatar, this.name});
+  PlayerBtn(
+      {this.check,
+      @required this.onPressed,
+      this.avatar,
+      this.name,
+      this.afterIcon,
+      this.beforeIcon});
   final check;
   final Function onPressed;
   final avatar;
   final name;
+  final beforeIcon;
+  final afterIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -20,36 +28,36 @@ class PlayerBtn extends StatelessWidget {
           width: 3.0,
         )),
       ),
-      child: new FlatButton.icon(
-        color: check ? Color(0xFF004990) : Color(0xFF2a2a2a),
-        icon: Icon(
-          check ? Icons.check_box : Icons.check_box_outline_blank,
-          color: check ? Colors.white : Color(0xFF525252),
-          size: 28.0,
-        ),
-        label: Row(
+      child: new FlatButton(
+        color: Color(check ? 0xFF004990 : 0xFF2a2a2a),
+        onPressed: onPressed,
+        child: Row(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(5.0),
+            Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: Icon(
+                check ? afterIcon : beforeIcon,
+                color: Color(check ? 0xFFffffff : 0xFF525252),
+                size: 28.0,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Image(
                 image: AssetImage(avatar),
                 width: 45,
                 height: 45,
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-              child: Text(
-                name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 21.0,
-                ),
+            Text(
+              name,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
               ),
             ),
           ],
         ),
-        onPressed: onPressed,
       ),
     );
   }

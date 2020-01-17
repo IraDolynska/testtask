@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PlayersContnr extends StatelessWidget {
-  PlayersContnr({this.avatar, this.name});
+class PlayersContainer extends StatelessWidget {
+  PlayersContainer({this.avatar, this.name});
   final avatar;
   final name;
 
@@ -15,16 +15,16 @@ class PlayersContnr extends StatelessWidget {
             color: Color(0xFF2a2a2a), borderRadius: BorderRadius.circular(30)),
         child: Row(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(5.0),
+            Padding(
+              padding: EdgeInsets.all(5.0),
               child: Image(
                 image: AssetImage(avatar),
                 width: 45,
                 height: 45,
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
+            Padding(
+              padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
               child: Text(
                 name,
                 style: TextStyle(

@@ -5,7 +5,7 @@ class Btn extends StatelessWidget {
   final text;
   final Function onPressed;
   final icon;
-  final bool iconFirst;
+  final iconFirst;
 
   @override
   Widget build(BuildContext context) {
@@ -20,44 +20,23 @@ class Btn extends StatelessWidget {
           width: 5.0,
         )),
       ),
-      child: icon != null
-          ? FlatButton.icon(
-              onPressed: onPressed,
-              color: Color(0xFFce1140),
-              disabledColor: Colors.red[300],
-              icon: iconFirst
-                  ? Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 21.0,
-                    )
-                  : Text(
-                      text,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 21.0,
-                        fontFamily: 'TypeWriter',
-                      ),
-                    ),
-              label: iconFirst
-                  ? Text(
-                      text,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 21.0,
-                        fontFamily: 'TypeWriter',
-                      ),
-                    )
-                  : Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 21.0,
-                    ),
-            )
-          : FlatButton(
-              onPressed: onPressed,
-              color: Color(0xFFce1140),
-              disabledColor: Colors.red[300],
+      child: FlatButton(
+        onPressed: onPressed,
+        color: Color(0xFFce1140),
+        disabledColor: Colors.red[300],
+        child: Row(
+          textDirection: iconFirst ? TextDirection.ltr : TextDirection.rtl,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            icon == null
+                ? Icon(null)
+                : Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 21.0,
+                  ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
               child: Text(
                 text,
                 style: TextStyle(
@@ -67,6 +46,9 @@ class Btn extends StatelessWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

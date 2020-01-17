@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class VoteBtn extends StatefulWidget {
   final icon;
   final colorBtn;
-  final colorShad;
+  final colorShadow;
   final int counter;
   final Function onPressed;
 
   VoteBtn(
       {this.icon,
       this.colorBtn,
-      this.colorShad,
+      this.colorShadow,
       this.counter,
       @required this.onPressed});
   @override
@@ -30,7 +30,7 @@ class VoteBtnState extends State<VoteBtn> {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: widget.colorShad,
+                color: widget.colorShadow,
                 spreadRadius: 2,
                 offset: Offset(0, 2),
               ),
@@ -45,7 +45,7 @@ class VoteBtnState extends State<VoteBtn> {
             ),
             shape: CircleBorder(),
             color: widget.colorBtn,
-            disabledColor: widget.colorShad,
+            disabledColor: widget.colorShadow,
           ),
         ),
         Positioned(

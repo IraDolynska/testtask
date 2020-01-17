@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:testtask/constants/imgList.dart';
-import 'package:testtask/screens/PlaceYourVote/index.dart';
-import 'package:testtask/screens/StingNomination/index.dart';
+import 'package:testtask/screens/GameWrapper/index.dart';
 import 'package:testtask/components/voteButton.dart';
+import 'package:testtask/services/navigation.dart';
 
 class VoteResult extends StatefulWidget {
   final voteRes;
@@ -22,10 +21,9 @@ class VoteResultState extends State<VoteResult> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      startTimer();
-    });
+    startTimer();
   }
+
   @override
   void deactivate() {
     super.deactivate();
@@ -38,14 +36,10 @@ class VoteResultState extends State<VoteResult> {
       (Timer timer) => setState(
         () {
           if (_start < 1) {
-            setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          widget.voteRes ? PlaceVote() : NomScreen()),
-                  (Route<dynamic> route) => false);
-            });
+            navigationReset(
+                context,
+                GameWrapper(
+                    screen: widget.voteRes ? 'PlaceVote' : 'NomScreen'));
           } else {
             _start = _start - 1;
           }
@@ -56,84 +50,57 @@ class VoteResultState extends State<VoteResult> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/StingNominationScreen.jpg"),
-              fit: BoxFit.cover,
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+            child: Image(
+              image: AssetImage(widget.voteRes
+                  ? 'assets/images/succs.png'
+                  : 'assets/images/fail.png'),
+              width: 285.5,
+              height: 86,
             ),
           ),
-        ),
-        Center(
-          child: Column(
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'PaybAck',
+              ),
+              children: [
+                TextSpan(
+                    text: widget.voteRes
+                        ? 'Sting begins in...\n'
+                        : 'Next nomination in...\n',
+                    style: TextStyle(fontSize: 24)),
+                TextSpan(text: '$_start', style: TextStyle(fontSize: 80)),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: images
-                        .map<Widget>((item) => Image(
-                            image: AssetImage(item), width: 45, height: 45))
-                        .toList()),
+              VoteBtn(
+                icon: Icons.thumb_up,
+                colorBtn: Color(0xFF008a63),
+                colorShadow: Color(0xFF004e38),
+                onPressed: null,
+                counter: widget.like,
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                child: Image(
-                  image: widget.voteRes
-                      ? AssetImage('assets/images/succs.png')
-                      : AssetImage('assets/images/fail.png'),
-                  width: 285.5,
-                  height: 86,
-                ),
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    widget.voteRes
-                        ? "Sting begins in..."
-                        : "Next nomination in...",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'PaybAck',
-                    ),
-                  ),
-                  Text(
-                    "$_start",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 80,
-                      fontFamily: 'PaybAck',
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      VoteBtn(
-                        icon: Icons.thumb_up,
-                        colorBtn: Color(0xFF008a63),
-                        colorShad: Color(0xFF004e38),
-                        onPressed: null,
-                        counter: widget.like,
-                      ),
-                      VoteBtn(
-                        icon: Icons.thumb_down,
-                        colorBtn: Color(0xFFce1141),
-                        colorShad: Color(0xFF71041f),
-                        onPressed: null,
-                        counter: widget.dislike,
-                      ),
-                    ],
-                  ),
-                ],
+              VoteBtn(
+                icon: Icons.thumb_down,
+                colorBtn: Color(0xFFce1141),
+                colorShadow: Color(0xFF71041f),
+                onPressed: null,
+                counter: widget.dislike,
               ),
             ],
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
